@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MySqlX.XDevAPI.Common;
 using ShelterApi.Models;
 using ShelterApi.Models.DTOs;
@@ -49,7 +50,16 @@ namespace ShelterApi.Controllers
             {
                 try
                 {
+                    var animal = await _context.Animals.ToListAsync();
 
+                    if (animal is not null)
+                    {
+                        return StatusCode(200, new { message = "Lekérdezve", Result = animal });
+                    }
+                }
+                catch (Exception exception)
+                {
+                    return BadRequest(exception.Message);
                 }
             }
 
